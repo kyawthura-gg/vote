@@ -49,7 +49,7 @@
             <div class="flex flex-col flex-1 px-2 py-6 md:flex-row">
                 <div class="flex-none mx-2 md:mx-0">
                     <a href="#">
-                        <img src="https://source.unsplash.com/200x200/?face&crop=face&v=1" alt="avatar" class="w-14 h-14 rounded-xl">
+                        <img src="{{ $idea->user->getAvatar() }}" alt="avatar" class="w-14 h-14 rounded-xl">
                     </a>
                 </div>
                 <div class="flex flex-col justify-between w-full mx-2 md:mx-4">
@@ -64,12 +64,12 @@
                         <div class="flex items-center space-x-2 text-xs font-semibold text-gray-400">
                             <div>{{ $idea->created_at->diffForHumans() }}</div>
                             <div>&bull;</div>
-                            <div>Category 1</div>
+                            <div>{{ $idea->category->name }}</div>
                             <div>&bull;</div>
                             <div class="text-gray-900">3 Comments</div>
                         </div>
                         <div x-data="{ isOpen: false }" class="flex items-center mt-4 space-x-2 md:mt-0">
-                            <div class="px-4 py-2 font-bold leading-none text-center uppercase bg-gray-200 rounded-full text-xxs w-28 h-7">Open</div>
+                            <div class="{{ $idea->status->classes }} px-4 py-2 font-bold leading-none text-center uppercase rounded-full text-xxs w-28 h-7">{{ $idea->status->name }}</div>
                             <button @click="isOpen = !isOpen" class="relative px-3 py-2 transition duration-150 ease-in bg-gray-100 border rounded-full hover:bg-gray-200 h-7">
                                 <svg fill="currentColor" width="24" height="6">
                                     <path d="M2.97.061A2.969 2.969 0 000 3.031 2.968 2.968 0 002.97 6a2.97 2.97 0 100-5.94zm9.184 0a2.97 2.97 0 100 5.939 2.97 2.97 0 100-5.939zm8.877 0a2.97 2.97 0 10-.003 5.94A2.97 2.97 0 0021.03.06z" style="color: rgba(163, 163, 163, .5)">
