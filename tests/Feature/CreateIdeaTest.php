@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Http\Livewire\CreateIdea;
+use App\Models\Category;
+use App\Models\Status;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -39,7 +42,7 @@ class CreateIdeaTest extends TestCase
             ->set('category', '')
             ->set('description', '')
             ->call('createIdea')
-            ->assertHasErrors(['title', 'category', 'description'])
+            ->assertHasErrors(['title', 'category', 'description']);
     }
 
     /** @test */
@@ -99,7 +102,7 @@ class CreateIdeaTest extends TestCase
 
         $this->assertDatabaseHas('ideas', [
             'title' => 'My First Idea',
-            'slug' => 'my-first-idea-1'
+            'slug' => 'my-first-idea-2'
         ]);
     }
 }
