@@ -8,12 +8,16 @@
         " class="flex transition duration-150 ease-in bg-white cursor-pointer idea-container hover:shadow-card rounded-xl">
     <div class="hidden px-5 py-8 border-r border-gray-100 md:block">
         <div class="text-center">
-            <div class="text-2xl font-semibold">{{ $votesCount }}</div>
+            <div class="text-2xl font-semibold @if ($hasVoted) text-blue @endif">{{ $votesCount }}</div>
             <div class="text-gray-500">Votes</div>
         </div>
 
         <div class="mt-8">
+            @if ($hasVoted)
+            <button class="w-20 px-4 py-3 font-bold text-white uppercase transition duration-150 ease-in border bg-blue border-blue hover:bg-blue-hover text-xxs rounded-xl">Voted</button>
+            @else
             <button class="w-20 px-4 py-3 font-bold uppercase transition duration-150 ease-in bg-gray-200 border border-gray-200 hover:border-gray-400 text-xxs rounded-xl">Vote</button>
+            @endif
         </div>
     </div>
     <div class="flex flex-col flex-1 px-2 py-6 md:flex-row">
@@ -53,12 +57,18 @@
 
                 <div class="flex items-center mt-4 md:hidden md:mt-0">
                     <div class="h-10 px-4 py-2 pr-8 text-center bg-gray-100 rounded-xl">
-                        <div class="text-sm font-bold leading-none">{{ $idea->votes_count }}</div>
+                        <div class="text-sm font-bold leading-none @if ($hasVoted) text-blue @endif">{{ $votesCount}}</div>
                         <div class="font-semibold leading-none text-gray-400 text-xxs">Votes</div>
                     </div>
+                    @if ($hasVoted)
+                    <button class="w-20 px-4 py-3 -mx-5 font-bold text-white uppercase transition duration-150 ease-in border bg-blue border-blue text-xxs rounded-xl hover:bg-blue-hover">
+                        Voted
+                    </button>
+                    @else
                     <button class="w-20 px-4 py-3 -mx-5 font-bold uppercase transition duration-150 ease-in bg-gray-200 border border-gray-200 text-xxs rounded-xl hover:border-gray-400">
                         Vote
                     </button>
+                    @endif
                 </div>
             </div>
         </div>
