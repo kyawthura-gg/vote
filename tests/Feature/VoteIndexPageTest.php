@@ -85,4 +85,29 @@ class VoteIndexPageTest extends TestCase
             ->assertSet('hasVoted', true)
             ->assertSee('Voted');
     }
+
+    /** @test */
+    public function not_logged_user_is_redirected_to_login_when_trying_to_vote()
+    {
+        $user = User::factory()->create();
+
+        $categoryOne = Category::factory()->create(['name' => 'Category 1']);
+
+        $statusOpen = Status::factory()->create(['name' => 'Open', 'classes' => 'bg-gray-200']);
+
+        $idea = Idea::factory()->create([
+            'user_id' => $user->id,
+            'category_id' => $categoryOne->id,
+            'status_id' => $statusOpen->id,
+            'title' => 'My First Idea',
+            'description' => 'Description for my first idea',
+        ]);
+
+        Livewire::test(IdeaIndex::class, [
+            'idea' => $idea,
+            'votesCount' => 5,
+        ])
+            ->call('vote')
+            ->assertRedirect(route('login'));
+    }
 }
