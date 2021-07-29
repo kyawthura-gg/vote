@@ -24,7 +24,7 @@ class CreateIdea extends Component
         ]);
     }
 
-    public function createIdeea()
+    public function createIdea()
     {
         if (auth()->check()) {
             $this->validate();
