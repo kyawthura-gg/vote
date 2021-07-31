@@ -28,6 +28,7 @@ class StatusFilters extends Component
     public function setStatus($newStatus)
     {
         $this->status = $newStatus;
+        $this->emit('queryStringUpdatedStatus', $this->status);
 
         if ($this->getPreviousRouteName() === 'idea.show') {
             return redirect()->route('idea.index', [
