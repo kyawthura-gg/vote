@@ -1,8 +1,8 @@
 <div class="relative" x-data="{ isOpen: false }" x-init="
-         window.livewire.on('statusWasUpdated', () => {
-             isOpen = false
-         })
-     ">
+        window.livewire.on('statusWasUpdated', () => {
+            isOpen = false
+        })
+    ">
     <button type="button" @click="isOpen = !isOpen" class="flex items-center justify-center px-6 py-3 mt-2 text-sm font-semibold transition duration-150 ease-in bg-gray-200 border border-gray-200 w-36 h-11 rounded-xl hover:border-gray-400 md:mt-0">
         <span>Set Status</span>
         <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,14 +55,14 @@
                     </svg>
                     <span class="ml-1">Attach</span>
                 </button>
-                <button type="submit" class="flex items-center justify-center w-1/2 px-6 py-3 text-xs font-semibold text-white transition duration-150 ease-in border h-11 bg-blue rounded-xl border-blue hover:bg-blue-hover">
+                <button type="submit" class="flex items-center justify-center w-1/2 px-6 py-3 text-xs font-semibold text-white transition duration-150 ease-in border h-11 bg-blue rounded-xl border-blue hover:bg-blue-hover disabled:opacity-50">
                     <span class="ml-1">Update</span>
                 </button>
             </div>
 
             <div>
                 <label class="inline-flex items-center font-normal">
-                    <input type="checkbox" name="notify_voters" class="bg-gray-200 rounded" checked="">
+                    <input wire:model="notifyAllVoters" type="checkbox" name="notify_voters" class="bg-gray-200 rounded">
                     <span class="ml-2">Notify all voters</span>
                 </label>
             </div>
