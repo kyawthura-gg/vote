@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Jobs\NotifyAllVoters;
 use App\Models\Idea;
 use Illuminate\Http\Response;
 use Livewire\Component;
@@ -10,6 +11,7 @@ class SetStatus extends Component
 {
     public $idea;
     public $status;
+    public $notifyAllVoters;
 
     public function mount(Idea $idea)
     {
@@ -25,6 +27,10 @@ class SetStatus extends Component
 
         $this->idea->status_id = $this->status;
         $this->idea->save();
+
+        if ($this->notifyAllVoters) {
+            NotifyAllVoters::dispatch($this->idea);
+        }
 
         $this->emit('statusWasUpdated');
     }
