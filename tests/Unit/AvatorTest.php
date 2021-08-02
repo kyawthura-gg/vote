@@ -14,7 +14,6 @@ class AvatorTest extends TestCase
     public function avator_generate_by_email_first_charactor()
     {
         $user = User::factory()->create([
-            'name' => 'Andre',
             'email' => 'afakeemail@fakeemail.com',
         ]);
 
