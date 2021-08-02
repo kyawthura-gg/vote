@@ -21,6 +21,8 @@ class CategoryFactory extends Factory
      */
     public function definition()
     {
-        return [];
+        return [
+            'name' => ucwords($this->faker->words(5, true)),
+        ];
     }
 }
