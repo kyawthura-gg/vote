@@ -14,7 +14,7 @@ class CreateIdea extends Component
 
     protected $rules = [
         'title' => 'required|min:4',
-        'category' => 'required|integer',
+        'category' => 'required|integer|exists:categories,id',
         'description' => 'required|min:4',
     ];
     public function render()
@@ -26,22 +26,25 @@ class CreateIdea extends Component
 
     public function createIdea()
     {
-        if (auth()->check()) {
-            $this->validate();
-            Idea::create([
-                "user_id" => auth()->id(),
-                'category_id' => $this->category,
-                'status_id' => 1,
-                'title' => $this->title,
-                'description' => $this->description,
-            ]);
-
-            session()->flash('success_message', 'Idea was added successfully.');
-
-            $this->reset();
-
-            return redirect()->route('idea.index');
+        if (auth()->guest()) {
+            abort(403);
         }
-        abort(403);
+
+        $this->validate();
+        $idea =  Idea::create([
+            "user_id" => auth()->id(),
+            'category_id' => $this->category,
+            'status_id' => 1,
+            'title' => $this->title,
+            'description' => $this->description,
+        ]);
+
+        $idea->vote(auth()->user());
+
+        session()->flash('success_message', 'Idea was added successfully.');
+
+        $this->reset();
+
+        return redirect()->route('idea.index');
     }
 }
