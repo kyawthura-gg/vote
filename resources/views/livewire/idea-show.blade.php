@@ -12,6 +12,11 @@
                     {{ $idea->title }}
                 </h4>
                 <div class="mt-3 text-gray-600">
+                    @admin
+                    @if ($idea->spam_reports > 0)
+                    <div class="mb-2 text-red">Spam Reports: {{ $idea->spam_reports }}</div>
+                    @endif
+                    @endadmin
                     {{ $idea->description }}
                 </div>
 
@@ -27,6 +32,7 @@
                     </div>
                     <div class="flex items-center mt-4 space-x-2 md:mt-0" x-data="{ isOpen: false }">
                         <div class="{{ $idea->status->classes }} text-xxs font-bold uppercase leading-none rounded-full text-center w-28 h-7 py-2 px-4">{{ $idea->status->name }}</div>
+                        @auth
                         <div class="relative">
                             <button class="relative px-3 py-2 transition duration-150 ease-in bg-gray-100 border rounded-full hover:bg-gray-200 h-7" @click="isOpen = !isOpen">
                                 <svg fill="currentColor" width="24" height="6">
@@ -55,9 +61,31 @@
                                     </a>
                                 </li>
                                 @endcan
-                                <li><a href="#" class="block px-5 py-3 transition duration-150 ease-in hover:bg-gray-100">Mark as Spam</a></li>
+
+                                <li>
+                                    <a href="#" @click.prevent="
+                                                isOpen = false
+                                                $dispatch('custom-show-mark-idea-as-spam-modal')
+                                            " class="block px-5 py-3 transition duration-150 ease-in hover:bg-gray-100">
+                                        Mark as Spam
+                                    </a>
+                                </li>
+
+                                @admin
+                                @if ($idea->spam_reports > 0)
+                                <li>
+                                    <a href="#" @click.prevent="
+                                                    isOpen = false
+                                                    $dispatch('custom-show-mark-idea-as-not-spam-modal')
+                                                " class="block px-5 py-3 transition duration-150 ease-in hover:bg-gray-100">
+                                        Not Spam
+                                    </a>
+                                </li>
+                                @endif
+                                @endadmin
                             </ul>
                         </div>
+                        @endauth
                     </div>
 
                     <div class="flex items-center mt-4 md:hidden md:mt-0">
@@ -107,11 +135,10 @@
                     </form>
                 </div>
             </div>
-            @auth
-            @if (auth()->user()->isAdmin())
+            @admin
             <livewire:set-status :idea="$idea" />
-            @endif
-            @endauth
+            @endadmin
+
         </div>
 
         <div class="items-center hidden space-x-3 md:flex">
