@@ -11,10 +11,10 @@
          isOpen = true
          $nextTick(() => $refs.confirmButton.focus())
      " x-init="
-         window.livewire.on('{{ $eventToCloseModal }}', () => {
+        Livewire.on('{{ $eventToCloseModal }}', () => {
              isOpen = false
          })
-     " class="fixed inset-0 z-10 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+     " class="fixed inset-0 z-20 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div x-show.transition.opacity.duration.300ms="isOpen" class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
 
