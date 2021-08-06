@@ -1,16 +1,37 @@
 <div x-data="{ isOpen: false }" x-init="
-         Livewire.on('commentWasAdded', () => {
-             isOpen = false
-         })
-     " class="relative">
-    <button type="button" @click="isOpen = !isOpen" class="flex items-center justify-center w-32 px-6 py-3 text-sm font-semibold text-white transition duration-150 ease-in border h-11 bg-blue rounded-xl border-blue hover:bg-blue-hover">
+        Livewire.on('commentWasAdded', () => {
+            isOpen = false
+        })
+        Livewire.hook('message.processed', (message, component) => {
+            if (['gotoPage', 'previousPage', 'nextPage'].includes(message.updateQueue[0].method)) {
+                 const firstComment = document.querySelector('.comment-container:first-child')
+                 firstComment.scrollIntoView({ behavior: 'smooth'})
+             }
+
+            if (message.updateQueue[0].payload.event === 'commentWasAdded'
+             && message.component.fingerprint.name === 'idea-comments') {
+                const lastComment = document.querySelector('.comment-container:last-child')
+                lastComment.scrollIntoView({ behavior: 'smooth'})
+                lastComment.classList.add('bg-green-50')
+                setTimeout(() => {
+                    lastComment.classList.remove('bg-green-50')
+                }, 5000)
+            }
+        })
+    " class="relative">
+    <button type="button" @click="
+            isOpen = !isOpen
+            if (isOpen) {
+                $nextTick(() => $refs.comment.focus())
+            }
+        " class="flex items-center justify-center w-32 px-6 py-3 text-sm font-semibold text-white transition duration-150 ease-in border h-11 bg-blue rounded-xl border-blue hover:bg-blue-hover">
         Reply
     </button>
     <div class="absolute z-10 w-64 mt-2 text-sm font-semibold text-left bg-white md:w-104 shadow-dialog rounded-xl" x-cloak x-show.transition.origin.top.left="isOpen" @click.away="isOpen = false" @keydown.escape.window="isOpen = false">
         @auth
         <form wire:submit.prevent="addComment" action="#" class="px-4 py-6 space-y-4">
             <div>
-                <textarea wire:model="comment" name="post_comment" id="post_comment" cols="30" rows="4" class="w-full px-4 py-2 text-sm placeholder-gray-900 bg-gray-100 border-none rounded-xl" placeholder="Go ahead, don't be shy. Share your thoughts..." required></textarea>
+                <textarea x-ref="comment" wire:model="comment" name="post_comment" id="post_comment" cols="30" rows="4" class="w-full px-4 py-2 text-sm placeholder-gray-900 bg-gray-100 border-none rounded-xl" placeholder="Go ahead, don't be shy. Share your thoughts..." required></textarea>
 
                 @error('comment')
                 <p class="mt-1 text-xs text-red">{{ $message }}</p>
