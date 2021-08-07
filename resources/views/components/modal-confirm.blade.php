@@ -1,5 +1,6 @@
 @props([
-'eventToOpenModal',
+'eventToOpenModal' => null,
+'livewireEventToOpenModal' => null,
 'eventToCloseModal',
 'modalTitle',
 'modalDescription',
@@ -7,14 +8,20 @@
 'wireClick',
 ])
 
-<div x-cloak x-data="{ isOpen: false }" x-show="isOpen" @keydown.escape.window="isOpen = false" {{ '@'.$eventToOpenModal }}.window="
-         isOpen = true
-         $nextTick(() => $refs.confirmButton.focus())
-     " x-init="
+<div x-cloak x-data="{ isOpen: false }" x-show="isOpen" @keydown.escape.window="isOpen = false" @if (! $livewireEventToOpenModal) {{ '@'.$eventToOpenModal }}.window="
+            isOpen = true
+            $nextTick(() => $refs.confirmButton.focus())
+        " @endif x-init="
         Livewire.on('{{ $eventToCloseModal }}', () => {
-             isOpen = false
-         })
-     " class="fixed inset-0 z-20 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            isOpen = false
+        })
+        @if ($livewireEventToOpenModal)
+            Livewire.on('{{ $livewireEventToOpenModal }}', () => {
+                isOpen = true
+                $nextTick(() => $refs.confirmButton.focus())
+            })
+        @endif
+    " class="fixed inset-0 z-20 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div x-show.transition.opacity.duration.300ms="isOpen" class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
 
