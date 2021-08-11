@@ -15,6 +15,7 @@
                 <option value="My Ideas">My Ideas</option>
                 @admin
                 <option value="Spam Ideas">Spam Ideas</option>
+                <option value="Spam Comments">Spam Comments</option>
                 @endadmin
             </select>
         </div>
@@ -33,7 +34,7 @@
         <livewire:idea-index :key="$idea->id" :idea="$idea" :votesCount="$idea->votes_count" />
         @empty
         <div class="mx-auto mt-12 w-70">
-            <img src="{{ asset('img/no-idea.svg') }}" alt="No Ideas" class="mx-auto" style="mix-blend-mode: luminosity">
+            <img src="{{ asset('img/no-ideas.svg') }}" alt="No Ideas" class="mx-auto mix-blend-luminosity">
             <div class="mt-6 font-bold text-center text-gray-400">No ideas were found...</div>
         </div>
         @endforelse
