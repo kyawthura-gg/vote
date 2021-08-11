@@ -17,7 +17,7 @@
                     <div class="mb-2 text-red">Spam Reports: {{ $idea->spam_reports }}</div>
                     @endif
                     @endadmin
-                    {{ $idea->description }}
+                    {!! nl2br(e($idea->description)) !!}
                 </div>
 
                 <div class="flex flex-col justify-between mt-6 md:flex-row md:items-center">
@@ -31,7 +31,7 @@
                         <div class="text-gray-900">{{ $idea->comments()->count() }} comments</div>
                     </div>
                     <div class="flex items-center mt-4 space-x-2 md:mt-0" x-data="{ isOpen: false }">
-                        <div class="{{ $idea->status->classes }} text-xxs font-bold uppercase leading-none rounded-full text-center w-28 h-7 py-2 px-4">{{ $idea->status->name }}</div>
+                        <div class="{{ 'status-'.Str::kebab($idea->status->name) }} text-xxs font-bold uppercase leading-none rounded-full text-center w-28 h-7 py-2 px-4">{{ $idea->status->name }}</div>
                         @auth
                         <div class="relative">
                             <button class="relative px-3 py-2 transition duration-150 ease-in bg-gray-100 border rounded-full hover:bg-gray-200 h-7" @click="isOpen = !isOpen">
