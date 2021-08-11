@@ -6,22 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Laracasts Voting' }}</title>
+    <title>{{ $title ?? ' ZVote' }}</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="/css/app.css">
     <livewire:styles />
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="/js/app.js" defer></script>
 </head>
 
 <body class="font-sans text-sm text-gray-900 bg-gray-background">
     <header class="flex flex-col items-center justify-between px-8 py-4 md:flex-row">
-        <a href="/"><img src="{{ asset('img/logo.svg') }}" alt="logo"></a>
+        <a href="/" class="text-2xl">ZVote</a>
         <div class="flex items-center mt-2 md:mt-0">
             @if (Route::has('login'))
             <div class="px-6 py-4">
