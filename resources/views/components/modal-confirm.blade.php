@@ -15,7 +15,7 @@
         Livewire.on('{{ $eventToCloseModal }}', () => {
             isOpen = false
         })
-        @if ($livewireEventToOpenModal)
+        @if ($eventToOpenModal)
             Livewire.on('{{ $livewireEventToOpenModal }}', () => {
                 isOpen = true
                 $nextTick(() => $refs.confirmButton.focus())
