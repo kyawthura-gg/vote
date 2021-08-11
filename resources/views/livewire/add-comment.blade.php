@@ -8,7 +8,7 @@
                  firstComment.scrollIntoView({ behavior: 'smooth'})
              }
 
-            if (message.updateQueue[0].payload.event === 'commentWasAdded'
+             if (['commentWasAdded', 'statusWasUpdated'].includes(message.updateQueue[0].payload.event)
              && message.component.fingerprint.name === 'idea-comments') {
                 const lastComment = document.querySelector('.comment-container:last-child')
                 lastComment.scrollIntoView({ behavior: 'smooth'})
@@ -17,7 +17,17 @@
                     lastComment.classList.remove('bg-green-50')
                 }, 5000)
             }
+
         })
+
+        @if (session('scrollToComment'))
+             const commentToScrollTo = document.querySelector('#comment-{{ session('scrollToComment') }}')
+             commentToScrollTo.scrollIntoView({ behavior: 'smooth'})
+             commentToScrollTo.classList.add('bg-green-50')
+             setTimeout(() => {
+                 commentToScrollTo.classList.remove('bg-green-50')
+             }, 5000)
+         @endif
     " class="relative">
     <button type="button" @click="
             isOpen = !isOpen
@@ -55,10 +65,10 @@
         <div class="px-4 py-6">
             <p class="font-normal">Please login or create an account to post a comment.</p>
             <div class="flex items-center mt-8 space-x-3">
-                <a href="{{ route('login') }}" class="w-1/2 px-6 py-3 text-sm font-semibold text-center text-white transition duration-150 ease-in h-11 bg-blue rounded-xl hover:bg-blue-hover">
+                <a wire:click.prevent="redirectToLogin" href="{{ route('login') }}" class="w-1/2 px-6 py-3 text-sm font-semibold text-center text-white transition duration-150 ease-in h-11 bg-blue rounded-xl hover:bg-blue-hover">
                     Login
                 </a>
-                <a href="{{ route('register') }}" class="flex items-center justify-center w-1/2 px-6 py-3 text-xs font-semibold transition duration-150 ease-in bg-gray-200 border border-gray-200 h-11 rounded-xl hover:border-gray-400">
+                <a wire:click.prevent="redirectToRegister" href="{{ route('register') }}" class="flex items-center justify-center w-1/2 px-6 py-3 text-xs font-semibold transition duration-150 ease-in bg-gray-200 border border-gray-200 h-11 rounded-xl hover:border-gray-400">
                     Sign Up
                 </a>
             </div>
