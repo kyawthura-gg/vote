@@ -1,18 +1,35 @@
-<div class="relative flex mt-4 transition duration-500 ease-in bg-white comment-container rounded-xl">
+<div id="comment-{{ $comment->id }}" class="@if ($comment->is_status_update) is-status-update {{ 'status-'.Str::kebab($comment->status->name)}}@endif comment-container relative bg-white rounded-xl flex transition duration-500 ease-in mt-4">
     <div class="flex flex-col flex-1 px-4 py-6 md:flex-row">
         <div class="flex-none">
             <a href="#">
                 <img src="{{ $comment->user->getAvatar() }}" alt="avatar" class="w-14 h-14 rounded-xl">
             </a>
+            @if ($comment->user->isAdmin())
+            <div class="mt-1 font-bold uppercase md:text-center text-blue text-xxs">Admin</div>
+            @endif
         </div>
         <div class="w-full md:mx-4">
             <div class="text-gray-600">
-                {{ $comment->body }}
+                @admin
+                @if ($comment->spam_reports > 0)
+                <div class="mb-2 text-red">Spam Reports: {{ $comment->spam_reports }}</div>
+                @endif
+                @endadmin
+
+                @if ($comment->is_status_update)
+                <h4 class="mb-3 text-xl font-semibold">
+                    Status Changed to "{{ $comment->status->name }}"
+                </h4>
+                @endif
+
+                <div class="mt-4 md:mt-0">
+                    {!! nl2br(e($comment->body)) !!}
+                </div>
             </div>
 
             <div class="flex items-center justify-between mt-6">
                 <div class="flex items-center space-x-2 text-xs font-semibold text-gray-400">
-                    <div class="font-bold text-gray-900">{{ $comment->user->name }}</div>
+                    <div class="@if ($comment->is_status_update) text-blue @endif font-bold text-gray-900">{{ $comment->user->name }}</div>
                     <div>&bull;</div>
                     {{-- @if ($comment->user->id === $comment->idea->user->id) --}}
                     @if ($comment->user->id === $ideaUserId)
@@ -40,17 +57,39 @@
                                 </a>
                             </li>
                             @endcan
+
                             @can('delete', $comment)
                             <li>
                                 <a href="#" @click.prevent="
-                                         isOpen = false
-                                         Livewire.emit('setDeleteComment', {{ $comment->id }})
-                                     " class="block px-5 py-3 transition duration-150 ease-in hover:bg-gray-100">
+                                        isOpen = false
+                                        Livewire.emit('setDeleteComment', {{ $comment->id }})
+                                    " class="block px-5 py-3 transition duration-150 ease-in hover:bg-gray-100">
                                     Delete Comment
                                 </a>
                             </li>
                             @endcan
-                            <li><a href="#" class="block px-5 py-3 transition duration-150 ease-in hover:bg-gray-100">Mark as Spam</a></li>
+
+                            <li>
+                                <a href="#" @click.prevent="
+                                        isOpen = false
+                                        Livewire.emit('setMarkAsSpamComment', {{ $comment->id }})
+                                    " class="block px-5 py-3 transition duration-150 ease-in hover:bg-gray-100">
+                                    Mark as Spam
+                                </a>
+                            </li>
+
+                            @admin
+                            @if ($comment->spam_reports > 0)
+                            <li>
+                                <a href="#" @click.prevent="
+                                            isOpen = false
+                                            Livewire.emit('setMarkAsNotSpamComment', {{ $comment->id }})
+                                        " class="block px-5 py-3 transition duration-150 ease-in hover:bg-gray-100">
+                                    Not Spam
+                                </a>
+                            </li>
+                            @endif
+                            @endadmin
                         </ul>
                     </div>
                 </div>

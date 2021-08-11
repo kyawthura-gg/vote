@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Livewire\Traits\WithAuthRedirects;
 use App\Models\Category;
 use App\Models\Idea;
 use App\Models\Status;
@@ -11,7 +12,7 @@ use Livewire\WithPagination;
 
 class IdeasIndex extends Component
 {
-    use WithPagination;
+    use WithPagination, WithAuthRedirects;
 
     public $status;
     public $category;
@@ -50,8 +51,8 @@ class IdeasIndex extends Component
     public function updatedFilter()
     {
         if ($this->filter === 'My Ideas') {
-            if (!auth()->check()) {
-                return redirect()->route('login');
+            if (auth()->guest()) {
+                return $this->redirectToLogin();
             }
         }
     }
@@ -77,10 +78,14 @@ class IdeasIndex extends Component
                     return $query->orderByDesc('votes_count');
                 })->when($this->filter && $this->filter === 'My Ideas', function ($query) {
                     return $query->where('user_id', auth()->id());
-                })->when(strlen($this->search) >= 3, function ($query) {
-                    return $query->where('title', 'like', '%' . $this->search . '%');
                 })->when($this->filter && $this->filter === 'Spam Ideas', function ($query) {
                     return $query->where('spam_reports', '>', 0)->orderByDesc('spam_reports');
+                })->when($this->filter && $this->filter === 'Spam Comments', function ($query) {
+                    return $query->whereHas('comments', function ($query) {
+                        $query->where('spam_reports', '>', 0);
+                    });
+                })->when(strlen($this->search) >= 3, function ($query) {
+                    return $query->where('title', 'like', '%' . $this->search . '%');
                 })
                 ->addSelect([
                     'voted_by_user' => Vote::select('id')
